@@ -64,4 +64,23 @@ public class UsuarioDAO {
             return null;
         }
     }
+    
+    public Usuario autenticar(String email, String contrasena) {
+    Session session = NewHibernateUtil.getSessionFactory().openSession();
+    Usuario usuario = null;
+
+    try {
+        usuario = (Usuario) session.createQuery(
+            "FROM Usuario WHERE email = :email AND contrasena = :contrasena AND estadoCuenta = 'Activo'")
+            .setParameter("email", email)
+            .setParameter("contrasena", contrasena)
+            .uniqueResult();
+    } catch (Exception e) {
+        e.printStackTrace();
+    } finally {
+        session.close();
+    }
+
+    return usuario;
+}
 }
